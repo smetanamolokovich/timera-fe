@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
 import { useAuthStore } from '@/features/auth/store'
-import { login, getMe, switchOrg } from './api'
+import { login, getMe, switchOrg, register } from './api'
 
 export function useLogin() {
   const router = useRouter()
@@ -48,6 +48,30 @@ export function useSwitchOrg() {
       setToken(data.access_token)
       document.cookie = `timera-auth-token=${data.access_token}; path=/`
       queryClient.clear()
+    },
+  })
+}
+
+export function useRegister() {
+  const router = useRouter()
+  const setToken = useAuthStore((s) => s.setToken)
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: register,
+    onSuccess: async (_, variables) => {
+      const data = await login(variables.email, variables.password)
+      setToken(data.access_token)
+      document.cookie = `timera-auth-token=${data.access_token}; path=/`
+      queryClient.clear()
+      router.push('/projects')
+    },
+    onError: () => {
+      notifications.show({
+        color: 'red',
+        title: 'Registration failed',
+        message: 'This email may already be in use',
+      })
     },
   })
 }

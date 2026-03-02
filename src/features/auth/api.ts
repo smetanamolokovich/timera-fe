@@ -24,3 +24,16 @@ export function updateMe(data: {
 export function switchOrg(organizationId: string) {
   return apiClient.post<LoginResponse>('/auth/switch-org', { organizationId })
 }
+
+export function register(data: {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  timezone?: string
+  locale?: string
+  phone?: string
+  inviteToken?: string
+}) {
+  return apiClient.post<UserResponse>('/users/register', data)
+}
