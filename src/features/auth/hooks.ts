@@ -13,8 +13,8 @@ export function useLogin() {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       login(email, password),
     onSuccess: (data) => {
-      setToken(data.access_token)
-      document.cookie = `timera-auth-token=${data.access_token}; path=/`
+      setToken(data.accessToken)
+      document.cookie = `timera-auth-token=${data.accessToken}; path=/`
       queryClient.clear()
       router.push('/projects')
     },
@@ -45,8 +45,8 @@ export function useSwitchOrg() {
   return useMutation({
     mutationFn: (organizationId: string) => switchOrg(organizationId),
     onSuccess: (data) => {
-      setToken(data.access_token)
-      document.cookie = `timera-auth-token=${data.access_token}; path=/`
+      setToken(data.accessToken)
+      document.cookie = `timera-auth-token=${data.accessToken}; path=/`
       queryClient.clear()
     },
   })
@@ -61,8 +61,8 @@ export function useRegister() {
     mutationFn: register,
     onSuccess: async (_, variables) => {
       const data = await login(variables.email, variables.password)
-      setToken(data.access_token)
-      document.cookie = `timera-auth-token=${data.access_token}; path=/`
+      setToken(data.accessToken)
+      document.cookie = `timera-auth-token=${data.accessToken}; path=/`
       queryClient.clear()
       router.push('/projects')
     },
